@@ -33,8 +33,8 @@ function getErrors(error: yup.ValidationError): Record<string, string> {
   }, {});
 }
 
-/** Wraps a form component with shared values, Yup validation, and submit state. */
-export function withYupValidation<TProps extends object, TValues extends object>(
+
+export function withValidation<TProps extends object, TValues extends object>(
   WrappedComponent: ComponentType<TProps & FormProps<TValues>>,
   options: Options<TProps, TValues>,
 ): ComponentType<TProps> {
@@ -117,6 +117,6 @@ export function withYupValidation<TProps extends object, TValues extends object>
     return <WrappedComponent {...props} form={form} />;
   }
 
-  WithYupValidation.displayName = `withYupValidation(${WrappedComponent.displayName ?? WrappedComponent.name ?? 'Component'})`;
+  WithYupValidation.displayName = `withValidation(${WrappedComponent.displayName ?? WrappedComponent.name ?? 'Component'})`;
   return WithYupValidation;
 }

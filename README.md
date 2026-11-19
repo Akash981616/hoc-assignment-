@@ -13,9 +13,9 @@ Create a production build with `npm run build`.
 
 ## Forms
 
-Profile, Support Request, and Inventory Item forms use the same `withYupValidation` wrapper and shared field component. Each has its own Yup schema, initial values, and submit handler, so the HOC is reusable across different data shapes. After successful validation, each handler logs its form name and values to the browser console.
+Profile, Support Request, and Inventory Item forms use the same `withValidation` wrapper and shared field component. Each has its own Yup schema, initial values, and submit handler, so the HOC is reusable across different data shapes. After successful validation, each handler logs its form name and values to the browser console.
 
-- `src/hoc/withYupValidation.tsx` wraps a form view with shared state and Yup validation.
+- `src/hoc/withValidation.tsx` wraps a form view with shared state and Yup validation.
 - `src/forms/forms.tsx` configures the three forms with their own schema and submit behavior.
 - `src/components/FormInput.tsx` contains one reusable input, select, and textarea field with accessible validation feedback.
 - `src/validation/common.ts` holds shared rules and the per-form schemas.

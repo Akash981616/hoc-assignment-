@@ -15,7 +15,7 @@ type FormInputProps = {
   multiline?: boolean;
 };
 
-/** A shared input, select, or textarea with accessible validation feedback. */
+
 export function FormInput({
   name,
   label,

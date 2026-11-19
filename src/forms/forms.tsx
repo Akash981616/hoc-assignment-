@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { FormInput } from '../components/FormInput';
-import { withYupValidation, type FormController } from '../hoc/withYupValidation';
+import { withValidation, type FormController } from '../hoc/withValidation';
 import {
   inventorySchema,
   profileSchema,
@@ -78,19 +78,19 @@ function InventoryForm({ form }: FormProps<InventoryValues>) {
   );
 }
 
-export const ValidatedProfileForm = withYupValidation<SaveProps<ProfileValues>, ProfileValues>(ProfileForm, {
+export const ValidatedProfileForm = withValidation<SaveProps<ProfileValues>, ProfileValues>(ProfileForm, {
   initialValues: { fullName: '', email: '', phone: '' },
   validationSchema: profileSchema,
   onSubmit: (values, props) => props.onSave('Profile', values),
 });
 
-export const ValidatedSupportForm = withYupValidation<SaveProps<SupportValues>, SupportValues>(SupportForm, {
+export const ValidatedSupportForm = withValidation<SaveProps<SupportValues>, SupportValues>(SupportForm, {
   initialValues: { email: '', category: '', subject: '', message: '' },
   validationSchema: supportSchema,
   onSubmit: (values, props) => props.onSave('Support request', values),
 });
 
-export const ValidatedInventoryForm = withYupValidation<SaveProps<InventoryValues>, InventoryValues>(InventoryForm, {
+export const ValidatedInventoryForm = withValidation<SaveProps<InventoryValues>, InventoryValues>(InventoryForm, {
   initialValues: { productName: '', sku: '', quantity: '', price: '' },
   validationSchema: inventorySchema,
   onSubmit: (values, props) => props.onSave('Inventory item', values),
