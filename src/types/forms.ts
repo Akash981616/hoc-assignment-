@@ -14,13 +14,7 @@ export type SupportValues = {
   message: string;
 };
 
-export type InventoryValues = {
-  productName: string;
-  sku: string;
-  quantity: string;
-  price: string;
-};
-
+export type FormId = 'profile' | 'support';
 export type FieldErrors<T extends object> = Partial<Record<keyof T, string>>;
 export type TouchedFields<T extends object> = Partial<Record<keyof T, boolean>>;
 

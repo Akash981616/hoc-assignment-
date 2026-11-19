@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { formText } from '../constants/formText';
 import { validationMessages } from '../constants/messages';
-import type { InventoryValues, ProfileValues, SupportValues } from '../types/forms';
+import type { ProfileValues, SupportValues } from '../types/forms';
 
 export const commonRules = {
   email: yup
@@ -48,20 +48,3 @@ export const supportSchema: yup.ObjectSchema<SupportValues> = yup.object({
     .max(1000, validationMessages.messageTooLong),
 }).required();
 
-export const inventorySchema: yup.ObjectSchema<InventoryValues> = yup.object({
-  productName: commonRules.text(formText.inventory.fields.productName),
-  sku: yup
-    .string()
-    .trim()
-    .required(validationMessages.fieldRequired(formText.inventory.fields.sku))
-    .matches(/^[A-Z0-9][A-Z0-9_-]{2,19}$/, validationMessages.skuInvalid),
-  quantity: yup
-    .string()
-    .required(validationMessages.fieldRequired(formText.inventory.fields.quantity))
-    .matches(/^[1-9]\d{0,5}$/, validationMessages.quantityInvalid),
-  price: yup
-    .string()
-    .required(validationMessages.fieldRequired(formText.inventory.fields.price))
-    .matches(/^(?:0|[1-9]\d{0,7})(?:\.\d{1,2})?$/, validationMessages.priceInvalid)
-    .test('positive', validationMessages.priceMustBePositive, (value) => Number(value) > 0),
-}).required();

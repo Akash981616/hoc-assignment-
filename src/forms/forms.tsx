@@ -2,11 +2,20 @@ import { FormInput } from '../components/FormInput';
 import { formText } from '../constants/formText';
 import { submitMessages } from '../constants/messages';
 import { withValidation } from '../hoc/withValidation';
-import type { FormController, FormProps, InventoryValues, ProfileValues, SaveProps, SupportValues } from '../types/forms';
+import type {
+  FormController,
+  FormProps,
+  ProfileValues,
+  SaveProps,
+  SupportValues,
+} from '../types/forms';
 import type { FormShellProps } from '../types/fields';
-import { inventorySchema, profileSchema, supportSchema } from '../validation/common';
+import { profileSchema, supportSchema } from '../validation/common';
 
-function fieldProps<T extends object, K extends keyof T>(form: FormController<T>, name: K) {
+function fieldProps<T extends object, K extends keyof T>(
+  form: FormController<T>,
+  name: K,
+) {
   return {
     name: String(name),
     value: String(form.values[name] ?? ''),
@@ -17,7 +26,11 @@ function fieldProps<T extends object, K extends keyof T>(form: FormController<T>
   };
 }
 
-function FormShell<T extends object>({ form, children, buttonText }: FormShellProps<T>) {
+function FormShell<T extends object>({
+  form,
+  children,
+  buttonText,
+}: FormShellProps<T>) {
   return (
     <form noValidate onSubmit={form.handleSubmit}>
       {children}
@@ -78,37 +91,20 @@ function SupportForm({ form }: SaveProps<SupportValues> & FormProps<SupportValue
   );
 }
 
-function InventoryForm({ form }: SaveProps<InventoryValues> & FormProps<InventoryValues>) {
-  return (
-    <FormShell form={form} buttonText={formText.inventory.button}>
-      <FormInput label={formText.inventory.fields.productName} {...fieldProps(form, 'productName')} />
-      <FormInput
-        label={formText.inventory.fields.sku}
-        hint={formText.inventory.skuHint}
-        {...fieldProps(form, 'sku')}
-      />
-      <div className="field-row">
-        <FormInput label={formText.inventory.fields.quantity} {...fieldProps(form, 'quantity')} />
-        <FormInput label={formText.inventory.fields.price} {...fieldProps(form, 'price')} />
-      </div>
-    </FormShell>
-  );
-}
+export const ValidatedProfileForm = withValidation<SaveProps<ProfileValues>, ProfileValues>(
+  ProfileForm,
+  {
+    initialValues: { fullName: '', email: '', phone: '' },
+    validationSchema: profileSchema,
+    onSubmit: (values, props) => props.onSave(formText.profile.name, values),
+  },
+);
 
-export const ValidatedProfileForm = withValidation<SaveProps<ProfileValues>, ProfileValues>(ProfileForm, {
-  initialValues: { fullName: '', email: '', phone: '' },
-  validationSchema: profileSchema,
-  onSubmit: (values, props) => props.onSave(formText.profile.name, values),
-});
-
-export const ValidatedSupportForm = withValidation<SaveProps<SupportValues>, SupportValues>(SupportForm, {
-  initialValues: { email: '', category: '', subject: '', message: '' },
-  validationSchema: supportSchema,
-  onSubmit: (values, props) => props.onSave(formText.support.name, values),
-});
-
-export const ValidatedInventoryForm = withValidation<SaveProps<InventoryValues>, InventoryValues>(InventoryForm, {
-  initialValues: { productName: '', sku: '', quantity: '', price: '' },
-  validationSchema: inventorySchema,
-  onSubmit: (values, props) => props.onSave(formText.inventory.name, values),
-});
+export const ValidatedSupportForm = withValidation<SaveProps<SupportValues>, SupportValues>(
+  SupportForm,
+  {
+    initialValues: { email: '', category: '', subject: '', message: '' },
+    validationSchema: supportSchema,
+    onSubmit: (values, props) => props.onSave(formText.support.name, values),
+  },
+);

@@ -9,6 +9,7 @@ export const formText = {
   },
   support: {
     name: 'Support request',
+    title: 'Support request',
     button: 'Submit request',
     fields: {
       email: 'Reply email',
@@ -17,17 +18,6 @@ export const formText = {
       message: 'Details',
     },
     messageHint: 'Describe the request in at least 20 characters.',
-  },
-  inventory: {
-    name: 'Inventory item',
-    button: 'Submit item',
-    fields: {
-      productName: 'Product name',
-      sku: 'SKU',
-      quantity: 'Quantity',
-      price: 'Unit price (USD)',
-    },
-    skuHint: 'Use 3–20 uppercase letters, numbers, hyphens, or underscores.',
   },
   categories: [
     { value: 'account', label: 'Account access' },

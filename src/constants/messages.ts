@@ -10,10 +10,6 @@ export const validationMessages = {
   categoryInvalid: 'Choose a valid category.',
   messageTooShort: 'Please provide at least 20 characters.',
   messageTooLong: 'Message must be 1000 characters or fewer.',
-  skuInvalid: 'Use 3–20 uppercase letters, numbers, hyphens, or underscores.',
-  quantityInvalid: 'Enter a whole number from 1 to 999999.',
-  priceInvalid: 'Enter a price with up to 2 decimal places.',
-  priceMustBePositive: 'Price must be greater than zero.',
 };
 
 export const submitMessages = {
