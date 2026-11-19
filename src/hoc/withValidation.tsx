@@ -3,7 +3,6 @@ import * as yup from 'yup';
 import { submitMessages } from '../constants/messages';
 import type {
   FieldErrors,
- 
   FormState,
   ValidatedFormComponent,
   ValidationHocOptions,
