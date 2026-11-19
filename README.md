@@ -18,7 +18,9 @@ Profile, Support Request, and Inventory Item forms use the same `withValidation`
 - `src/hoc/withValidation.tsx` wraps a form view with shared state and Yup validation.
 - `src/forms/forms.tsx` configures the three forms with their own schema and submit behavior.
 - `src/components/FormInput.tsx` contains one reusable input, select, and textarea field with accessible validation feedback.
-- `src/validation/common.ts` holds shared rules and the per-form schemas.
+- `src/validation/common.ts` holds the per-form Yup schemas.
+- `src/types/` contains all TypeScript types.
+- `src/constants/` contains validation, submit, and form text.
 - `src/components/FormWorkspace.tsx` selects a form and reports successful submissions.
 
 The submit handlers are easy to replace with API requests when a server is available. Keep server-side validation in place when integrating a backend.

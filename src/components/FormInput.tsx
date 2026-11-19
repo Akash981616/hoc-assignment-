@@ -1,19 +1,6 @@
 import type { ChangeEvent } from 'react';
-
-type FormInputProps = {
-  name: string;
-  label: string;
-  value: string;
-  error?: string;
-  touched: boolean;
-  onValueChange: (value: string) => void;
-  onBlur: () => void;
-  type?: 'text' | 'email' | 'tel';
-  autoComplete?: string;
-  hint?: string;
-  options?: Array<{ value: string; label: string }>;
-  multiline?: boolean;
-};
+import { formText } from '../constants/formText';
+import type { FormFieldProps } from '../types/fields';
 
 
 export function FormInput({
@@ -29,7 +16,7 @@ export function FormInput({
   hint,
   options,
   multiline = false,
-}: FormInputProps) {
+}: FormFieldProps) {
   const id = `field-${name}`;
   const errorId = `${id}-error`;
   const hintId = `${id}-hint`;
@@ -59,7 +46,7 @@ export function FormInput({
           aria-invalid={showError}
           aria-describedby={description}
         >
-          <option value="">Select one…</option>
+          <option value="">{formText.selectPrompt}</option>
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}

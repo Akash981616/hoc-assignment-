@@ -1,34 +1,13 @@
 import { useRef, useState, type ComponentType, type FormEvent } from 'react';
 import * as yup from 'yup';
-
-type Errors<T> = Partial<Record<keyof T, string>>;
-
-export type FormController<T extends object> = {
-  values: T;
-  errors: Errors<T>;
-  touched: Partial<Record<keyof T, boolean>>;
-  isSubmitting: boolean;
-  status: string;
-  setFieldValue: (field: keyof T, value: string) => void;
-  setFieldTouched: (field: keyof T) => void;
-  handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
-};
-
-type FormProps<T extends object> = { form: FormController<T> };
-
-type Options<P extends object, T extends object> = {
-  initialValues: T;
-  validationSchema: yup.AnyObjectSchema;
-  onSubmit: (values: T, props: P) => void | Promise<void>;
-};
-
-type State<T extends object> = {
-  values: T;
-  errors: Errors<T>;
-  touched: Partial<Record<keyof T, boolean>>;
-  isSubmitting: boolean;
-  status: string;
-};
+import { submitMessages } from '../constants/messages';
+import type {
+  FieldErrors,
+ 
+  FormState,
+  ValidatedFormComponent,
+  ValidationHocOptions,
+} from '../types/forms';
 
 function getErrors(error: yup.ValidationError): Record<string, string> {
   const issues = error.inner.length ? error.inner : [error];
@@ -41,13 +20,13 @@ function getErrors(error: yup.ValidationError): Record<string, string> {
   return errors;
 }
 
-/** Shares form state and Yup validation across form components. */
+
 export function withValidation<P extends object, T extends object>(
-  FormComponent: ComponentType<P & FormProps<T>>,
-  options: Options<P, T>,
+  FormComponent: ValidatedFormComponent<P, T>,
+  options: ValidationHocOptions<P, T>,
 ): ComponentType<P> {
   function ValidatedForm(props: P) {
-    const [state, setState] = useState<State<T>>({
+    const [state, setState] = useState<FormState<T>>({
       values: options.initialValues,
       errors: {},
       touched: {},
@@ -57,7 +36,7 @@ export function withValidation<P extends object, T extends object>(
     const validationId = useRef(0);
 
     async function validate(values: T): Promise<Record<string, string> | null> {
-      const currentId = ++validationId.current;
+      const currentId = validationId.current;
       let errors: Record<string, string> = {};
 
       try {
@@ -67,7 +46,7 @@ export function withValidation<P extends object, T extends object>(
       }
 
       if (currentId !== validationId.current) return null;
-      setState((current) => ({ ...current, errors: errors as Errors<T> }));
+      setState((current) => ({ ...current, errors: errors as FieldErrors<T> }));
       return errors;
     }
 
@@ -103,19 +82,19 @@ export function withValidation<P extends object, T extends object>(
           errors: {},
           touched: {},
           isSubmitting: true,
-          status: 'Submitted successfully. Check the browser console for the form data.',
+          status: submitMessages.success,
         });
       } catch (error) {
         setState((current) => ({
           ...current,
-          status: error instanceof Error ? error.message : 'Unable to submit this form.',
+          status: error instanceof Error ? error.message : submitMessages.failure,
         }));
       } finally {
         setState((current) => ({ ...current, isSubmitting: false }));
       }
     }
 
-    const form: FormController<T> = {
+    const form = {
       values: state.values,
       errors: state.errors,
       touched: state.touched,

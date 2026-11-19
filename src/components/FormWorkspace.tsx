@@ -1,5 +1,6 @@
 import { ValidatedProfileForm } from '../forms/forms';
-import type { ProfileValues } from '../validation/common';
+import { formText } from '../constants/formText';
+import type { ProfileValues } from '../types/forms';
 
 export function FormWorkspace() {
   function logProfile(formName: string, values: ProfileValues) {
@@ -9,15 +10,15 @@ export function FormWorkspace() {
   return (
     <main className="page-shell">
       <section className="forms-column" aria-labelledby="profile-title">
-        <nav className="form-switcher" aria-label="Form">
+        <nav className="form-switcher" aria-label={formText.navigationLabel}>
           <button className="form-switcher-button active" type="button" aria-current="page">
-            Profile details
+            {formText.profile.title}
           </button>
         </nav>
 
         <div className="form-card">
           <div className="card-heading">
-            <h1 id="profile-title">Profile details</h1>
+            <h1 id="profile-title">{formText.profile.title}</h1>
           </div>
           <ValidatedProfileForm onSave={logProfile} />
         </div>

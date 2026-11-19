@@ -1,64 +1,67 @@
 import * as yup from 'yup';
-
+import { formText } from '../constants/formText';
+import { validationMessages } from '../constants/messages';
+import type { InventoryValues, ProfileValues, SupportValues } from '../types/forms';
 
 export const commonRules = {
   email: yup
     .string()
     .trim()
-    .required('Email is required.')
-    .email('Enter a valid email address.')
-    .max(254, 'Email must be 254 characters or fewer.'),
+    .required(validationMessages.emailRequired)
+    .email(validationMessages.emailInvalid)
+    .max(254, validationMessages.emailTooLong),
+
   text: (label: string) => yup
     .string()
     .trim()
-    .required(`${label} is required.`)
-    .min(2, `${label} must be at least 2 characters.`)
-    .max(120, `${label} must be 120 characters or fewer.`),
+    .required(validationMessages.fieldRequired(label))
+    .min(2, validationMessages.fieldTooShort(label, 2))
+    .max(120, validationMessages.fieldTooLong(label, 120)),
 };
 
-export const profileSchema = yup.object({
-  fullName: commonRules.text('Full name'),
+export const profileSchema: yup.ObjectSchema<ProfileValues> = yup.object({
+  fullName: commonRules.text(formText.profile.fields.fullName),
   email: commonRules.email,
   phone: yup
     .string()
     .trim()
-    .required('Phone number is required.')
-    .matches(/^\+?[0-9\s()-]{7,20}$/, 'Enter a valid phone number.'),
+    .required(validationMessages.fieldRequired(formText.profile.fields.phone))
+    .matches(/^\+?[0-9\s()-]{7,20}$/, validationMessages.phoneInvalid),
 }).required();
 
-export const supportSchema = yup.object({
+export const supportSchema: yup.ObjectSchema<SupportValues> = yup.object({
   email: commonRules.email,
   category: yup
     .string()
-    .required('Choose a category.')
-    .test('category', 'Choose a valid category.', (value) => !value || ['account', 'billing', 'technical'].includes(value)),
-  subject: commonRules.text('Subject'),
+    .required(validationMessages.categoryRequired)
+    .test(
+      'category',
+      validationMessages.categoryInvalid,
+      (value) => !value || formText.categories.some((category) => category.value === value),
+    ),
+  subject: commonRules.text(formText.support.fields.subject),
   message: yup
     .string()
     .trim()
-    .required('Describe the issue.')
-    .min(20, 'Please provide at least 20 characters.')
-    .max(1000, 'Message must be 1000 characters or fewer.'),
+    .required(validationMessages.fieldRequired(formText.support.fields.message))
+    .min(20, validationMessages.messageTooShort)
+    .max(1000, validationMessages.messageTooLong),
 }).required();
 
-export const inventorySchema = yup.object({
-  productName: commonRules.text('Product name'),
+export const inventorySchema: yup.ObjectSchema<InventoryValues> = yup.object({
+  productName: commonRules.text(formText.inventory.fields.productName),
   sku: yup
     .string()
     .trim()
-    .required('SKU is required.')
-    .matches(/^[A-Z0-9][A-Z0-9_-]{2,19}$/, 'Use 3–20 uppercase letters, numbers, hyphens, or underscores.'),
+    .required(validationMessages.fieldRequired(formText.inventory.fields.sku))
+    .matches(/^[A-Z0-9][A-Z0-9_-]{2,19}$/, validationMessages.skuInvalid),
   quantity: yup
     .string()
-    .required('Quantity is required.')
-    .matches(/^[1-9]\d{0,5}$/, 'Enter a whole number from 1 to 999999.'),
+    .required(validationMessages.fieldRequired(formText.inventory.fields.quantity))
+    .matches(/^[1-9]\d{0,5}$/, validationMessages.quantityInvalid),
   price: yup
     .string()
-    .required('Price is required.')
-    .matches(/^(?:0|[1-9]\d{0,7})(?:\.\d{1,2})?$/, 'Enter a price with up to 2 decimal places.')
-    .test('positive', 'Price must be greater than zero.', (value) => Number(value) > 0),
+    .required(validationMessages.fieldRequired(formText.inventory.fields.price))
+    .matches(/^(?:0|[1-9]\d{0,7})(?:\.\d{1,2})?$/, validationMessages.priceInvalid)
+    .test('positive', validationMessages.priceMustBePositive, (value) => Number(value) > 0),
 }).required();
-
-export type ProfileValues = yup.InferType<typeof profileSchema>;
-export type SupportValues = yup.InferType<typeof supportSchema>;
-export type InventoryValues = yup.InferType<typeof inventorySchema>;
