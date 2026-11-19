@@ -50,7 +50,8 @@ export function withValidation<P extends object, T extends object>(
     }
 
     function setFieldValue(field: keyof T, value: string) {
-      const values = { ...state.values, [field]: value };
+      const values = { ...valuesRef.current, [field]: value };
+      valuesRef.current = values;
       setState((current) => ({ ...current, values, status: '' }));
       if (state.touched[field]) void validate(values);
     }
